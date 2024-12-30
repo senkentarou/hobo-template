@@ -2,15 +2,13 @@ import { useMemo } from 'react';
 
 import { LinkContent } from '@freee_jp/vibes';
 import { useLocation, useMatches } from '@tanstack/react-router';
+// INFO: 現状はNavisとBreadcrumbsの実装のためだけに使用。
+// プロダクト全体で使用する場合は以下を考えたい
+//  ・定義漏れをしたときの検知方法 (開発時にアクセスしたときに絶対落とす仕組み and 片方言語のみ定義できない仕組み)
+//  ・より簡単な定義方法 (コードの内容分析 or AI活用)
+//  ・意図が伝わる翻訳 (多言語対応する覚悟)
+import { useTranslation } from 'react-i18next';
 import { MdOutlineHome, MdOutlineRouter } from 'react-icons/md';
-
-// TODO: i18n対応
-const t: { [key: string]: string } = {
-  '/': 'ホーム',
-  '/about': '紹介',
-  '/about/me': '自己紹介',
-  '/about/vibes': 'Vibesの紹介',
-};
 
 type Breadcrumb = { title: string; url?: string };
 
@@ -26,6 +24,7 @@ type RootStore = {
 };
 
 const useComputed = (): Computed => {
+  const { t } = useTranslation();
   const matches = useMatches();
   const location = useLocation();
 
@@ -39,25 +38,25 @@ const useComputed = (): Computed => {
   }, [matches]);
 
   const currentLocationName = useMemo(() => {
-    return t[location.pathname] || '';
-  }, [location.pathname]);
+    return t(location.pathname) || '';
+  }, [t, location.pathname]);
 
   const navis = useMemo(() => {
     return [
       {
-        title: t['/'],
+        title: t('/'),
         url: '/',
         IconComponent: MdOutlineHome,
-        current: location.pathname === '/',
+        current: location.pathname === '/', // rootの場合はそれ配下の階層は別のNavを示すことを前提とするため完全一致で判定
       },
       {
-        title: t['/about'],
+        title: t('/about'),
         url: '/about',
         IconComponent: MdOutlineRouter,
-        current: location.pathname !== '/' && currentPaths.includes(location.pathname),
+        current: location.pathname !== '/' && currentPaths.includes(location.pathname), // root以外の場合は現在のパスにグロナビに含まれている場合で判定
       },
     ];
-  }, [location.pathname, currentPaths]);
+  }, [t, location.pathname, currentPaths]);
 
   const breadcrumbs = useMemo(() => {
     // 1階層: root
@@ -67,11 +66,11 @@ const useComputed = (): Computed => {
 
     return currentPaths.map((path) => {
       return {
-        title: t[path],
+        title: t(path),
         url: location.pathname === path ? undefined : path, // 現在のページはリンク付けない
       };
     });
-  }, [location.pathname, currentPaths]);
+  }, [t, location.pathname, currentPaths]);
 
   return { currentPaths, currentLocationName, breadcrumbs, navis };
 };
