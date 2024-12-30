@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 
 import { Breadcrumbs, VibesProvider } from '@freee_jp/vibes';
 import { createRootRoute, Outlet } from '@tanstack/react-router';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import styled from 'styled-components';
 
 import { Footer, Header, Navi, NotFound } from './-components';
@@ -16,11 +17,24 @@ const StyledMain = styled.main`
 
 const RootComponent = () => {
   const {
-    computed: { breadcrumbs, navis },
+    computed: { currentLocationName, breadcrumbs, navis },
   } = useRootStore();
+
+  const PageTitle = () => {
+    return (
+      <Helmet>
+        {currentLocationName.length > 0 ? (
+          <title>Hobo Template | {currentLocationName}</title>
+        ) : (
+          <title>Hobo Template</title>
+        )}
+      </Helmet>
+    );
+  };
 
   return (
     <>
+      <PageTitle />
       <Header />
       <Navi links={navis} />
       <StyledMain>
@@ -35,7 +49,7 @@ const RootComponent = () => {
 const ContextProvider = ({ children }: { children: ReactNode }) => {
   return (
     <VibesProvider fixedLayout={false} lang="ja" portalParent={document.body}>
-      {children}
+      <HelmetProvider>{children}</HelmetProvider>
     </VibesProvider>
   );
 };

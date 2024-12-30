@@ -16,6 +16,7 @@ type Breadcrumb = { title: string; url?: string };
 
 type Computed = {
   currentPaths: string[];
+  currentLocationName: string;
   breadcrumbs: Breadcrumb[];
   navis: LinkContent[];
 };
@@ -31,6 +32,10 @@ const useComputed = (): Computed => {
   const currentPaths = useMemo(() => {
     return matches.map((m) => m.pathname.replace(/(.+)\/$/, '$1')).filter((p, idx, self) => self.indexOf(p) === idx);
   }, [matches]);
+
+  const currentLocationName = useMemo(() => {
+    return t[location.pathname] || '';
+  }, [location.pathname]);
 
   const navis = useMemo(() => {
     return [
@@ -63,7 +68,7 @@ const useComputed = (): Computed => {
     });
   }, [location.pathname, currentPaths]);
 
-  return { currentPaths, breadcrumbs, navis };
+  return { currentPaths, currentLocationName, breadcrumbs, navis };
 };
 
 export const useRootStore = (): RootStore => {
