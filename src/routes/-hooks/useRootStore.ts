@@ -30,6 +30,11 @@ const useComputed = (): Computed => {
   const location = useLocation();
 
   const currentPaths = useMemo(() => {
+    // root('/')以外のパスで末尾のスラッシュを削除して重複を除外したものを集める
+    // INFO:
+    // useMatchesはrouteTreeを深さ優先探索でpathを取得しているように見えるが
+    // 仕様変更時に探索手法が変わると配列の順番が変わってしまうためBreadcrumbsの仕様変更も同時に検討が必要となる。
+    // https://github.com/TanStack/router/blob/4cad52b3a5f67172e0545249b16350175b559bb6/packages/react-router/src/router.ts#L927-L960
     return matches.map((m) => m.pathname.replace(/(.+)\/$/, '$1')).filter((p, idx, self) => self.indexOf(p) === idx);
   }, [matches]);
 
@@ -63,7 +68,7 @@ const useComputed = (): Computed => {
     return currentPaths.map((path) => {
       return {
         title: t[path],
-        url: location.pathname === path ? undefined : path, // 現在のページはリンクを無効にする
+        url: location.pathname === path ? undefined : path, // 現在のページはリンク付けない
       };
     });
   }, [location.pathname, currentPaths]);

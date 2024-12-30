@@ -47,6 +47,8 @@ const RootComponent = () => {
 };
 
 const ContextProvider = ({ children }: { children: ReactNode }) => {
+  // INFO: ネストが深くなった場合は直列的に定義する方法を検討する
+  // 参考: https://www.pandanoir.info/entry/2021/12/17/003300
   return (
     <VibesProvider fixedLayout={false} lang="ja" portalParent={document.body}>
       <HelmetProvider>{children}</HelmetProvider>
