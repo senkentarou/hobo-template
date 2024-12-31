@@ -8,7 +8,10 @@ import { createRoot } from 'react-dom/client';
 import './i18n/config.ts';
 import { routeTree } from './routeTree.gen';
 
-const router = createRouter({ routeTree });
+const router = createRouter({
+  routeTree,
+  basepath: import.meta.env.MODE === 'development' ? '/' : '/hobo-template',
+});
 
 declare module '@tanstack/react-router' {
   interface Register {
