@@ -4,7 +4,11 @@ import { FaGithub } from 'react-icons/fa';
 export const Header = () => {
   return (
     <VibesHeader
-      logo={<StatusIcon type="success">senkentarou page</StatusIcon>}
+      logo={
+        <StatusIcon mt={1} type="success">
+          senkentarou page
+        </StatusIcon>
+      }
       logoUrl="/"
       sectionNode={
         <IconOnlyButton
