@@ -1,5 +1,6 @@
 name: Deploy GitHub Pages
 
+# see: https://docs.github.com/ja/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages
 on:
   push:
     branches: ["main"]
@@ -7,6 +8,10 @@ on:
 
 jobs:
   deploy:
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     environment:
       # needs to actions/github-pages
       name: github-pages
