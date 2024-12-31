@@ -10,7 +10,6 @@ import { routeTree } from './routeTree.gen';
 
 const router = createRouter({
   routeTree,
-  basepath: import.meta.env.MODE === 'development' ? '/' : '/hobo-template',
 });
 
 declare module '@tanstack/react-router' {
