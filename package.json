@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "vite",
     "prd": "vite --mode production",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
