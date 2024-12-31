@@ -23,7 +23,7 @@ jobs:
         uses: actions/setup-node@v4
 
       - name: Install and Build
-        run: pnpm install && pnpm build
+        run: corepack enable && pnpm install && pnpm build
 
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
